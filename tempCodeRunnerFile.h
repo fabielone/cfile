@@ -1,61 +1,91 @@
-#include <string.h>
 
-void insertar(Alumno arrData[], short *i)
+#include <stdio.h>
+
+void listar(Alumno arrDatost[], short *length)
 {
-    char buf[20];
-    PonTextoCentradoPantalla(2, "                                 ");
-    PonTextoCentradoPantalla(2, "insertar");
-    clearportion(2, 4, 79, 19);
-    // fgets(buf, 20, stdin);
+    PonTextoCentradoPantalla(2, "                 ");
+    PonTextoCentradoPantalla(2, "listar");
+    clearportion(2, 4, 81, 19);
+
+    gotoxy(2, 4);
+    printf(" # |");
+    printf(" Matricula | ");
+    printf(" Nombre  | ");
+    printf("Ape Paterno | ");
+    printf("Ape Materno | ");
+    printf("Edad | ");
+    printf("  Carrera    |");
+    printf("Act");
+
+    for (int i = 0; i < *length; i++)
+    {
+        gotoxy(2, 5 + i);
+        printf(" %d \n ", i + 1);
+        gotoxy(5, 5 + i);
+        printf("|\n");
+        CortarTexto(arrDatost[i].Matricula, 7, 5 + i, 6);
+        gotoxy(17, 5 + i);
+        printf("|");
+
+        CortarTexto(arrDatost[i].Nombre, 18, 5 + i, 10);
+        gotoxy(28, 5 + i);
+        printf("|");
+
+        CortarTexto(arrDatost[i].ApellidoP, 29, 5 + i, 13);
+        gotoxy(42, 5 + i);
+        printf("|");
+
+        CortarTexto(arrDatost[i].ApellidoM, 43, 5 + i, 13);
+        gotoxy(56, 5 + i);
+        printf("|");
+
+        CortarTexto(arrDatost[i].Edad, 57, 5 + i, 3);
+        gotoxy(63, 5 + i);
+        printf("|");
+
+        CortarTexto(arrDatost[i].Carrera, 64, 5 + i, 14);
+        gotoxy(78, 5 + i);
+        printf("|");
+        CortarTexto(arrDatost[i].Status, 79, 5 + i, 14);
+    }
+
     short opc;
     do
     {
-        clearportion(2, 4, 79, 19);
-        gotoxy(4, 4);
 
-        printf("Estudiante #:%hu", *i);
-
-        gotoxy(4, 5);
-        printf("Matricula:");
-        fgets(arrData[*i].Matricula, 25, stdin);
-        gotoxy(4, 6);
-        printf("Nombre:");
-        fgets(arrData[*i].Nombre, 25, stdin);
-        gotoxy(4, 7);
-        printf("Apellido Paterno:");
-        fgets(arrData[*i].ApellidoP, 25, stdin);
-        gotoxy(4, 8);
-        printf("Apellido Materno:");
-        fgets(arrData[*i].ApellidoM, 25, stdin);
-        gotoxy(4, 9);
-        printf("Edad:");
-        fgets(arrData[*i].Edad, 25, stdin);
-        gotoxy(4, 10);
-        printf("Carrera:");
-        fgets(arrData[*i].Carrera, 25, stdin);
-        gotoxy(4, 11);
-        strcpy(arrData[*i].Status, "1");
-        *i = *i + 1;
-        mensajes("Deseas agregar otro alumno? 0.NO / 1.SI. ", 32);
-
+        mensajes("Presione 0 para salir ", 32);
         opc = getch();
-
-        if ((opc == 49 || opc == 48))
-        {
-        }
-        else
-        {
-
-            do
-            {
-
-                mensajes("opcion no valida", 31);
-                delay(500);
-                mensajes("Deseas agregar otro alumno? 0.NO / 1.SI. ", 32);
-                opc = getch();
-            } while (opc != 48 && opc != 49);
-        }
     } while (opc != 48);
-    clearportion(2, 4, 79, 19);
-    // El salto para que no se coma el cuadro el mensaje de abajo
+    clearportion(2, 4, 81, 19);
+};
+
+void listarFile(){
+
+    FILE *cfPtr; // accounts.dat file pointer
+
+ // fopen opens the file; exits if file cannot be opened
+ if ((cfPtr = fopen("c2.txt", "rb" )) == NULL ) {
+ puts("File could not be opened.");
+ }
+ else {
+ 
+
+ // read all records from file (until eof)
+ while (!feof(cfPtr)) {
+ // create clientData with default information
+ Alumno student = {"","",""};
+
+int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
+ // display record
+ if (result != 0 && student.Matricula != 0) {
+ printf("%s %s %s %s\n",
+ student.Matricula, student.ApellidoP,
+ student.ApellidoM, student.Nombre);
+ }
+ }
+
+ fclose(cfPtr); // fclose closes the file
+ } 
+
+
 };

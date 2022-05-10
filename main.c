@@ -41,7 +41,8 @@ void main()
 
             */
 
-            insertar(arrDatos, &numtablas);
+            //insertar(arrDatos, &numtablas);
+            insertarFile(&numtablas);
             // listar(arrDatos, 1);
 
             break;
@@ -66,7 +67,8 @@ void main()
 
         case 54:
             /* funcion de listar */
-            listar(arrDatos, &numtablas);
+            //listar(arrDatos, &numtablas);
+            listarFile();
             break;
 
         case 53:

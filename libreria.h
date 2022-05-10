@@ -45,6 +45,14 @@ void CortarTexto(char *Texto, short c, short r, int length)
 
     char *arra = Texto;
 
+    if(length<strlen(arra)){
+
+        
+   }
+   else{
+       length=strlen(arra);
+   }
+
     for (int i = 0; i < length; i++)
     {
         gotoxy(c + i, r);
@@ -56,6 +64,14 @@ void CortarTextoInt(int *Texto, short c, short r, int length)
 { // wip
 
     int *arra = Texto;
+
+     if(length<strlen(arra)){
+
+        
+   }
+   else{
+       length=strlen(arra);
+   }
 
     for (int i = 0; i < length; i++)
     {

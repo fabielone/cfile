@@ -1,7 +1,7 @@
 
 typedef struct Alumno
 {
-
+    
     char Matricula[25];
     char Nombre[25];
     char ApellidoP[25];
