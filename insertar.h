@@ -63,15 +63,17 @@ void insertar(Alumno arrData[], short *i)
     // El salto para que no se coma el cuadro el mensaje de abajo
 };
 
-void insertarFile(short *i){
+void insertarFile(short *i)
+{
     FILE *of;
-   of= fopen ("c2.txt", "a");
-   if (of == NULL) {
-      fprintf(stderr, "\nError to open the file\n");
-      exit (1);
-   }
+    of = fopen("c2.txt", "a");
+    if (of == NULL)
+    {
+        fprintf(stderr, "\nError to open the file\n");
+        exit(1);
+    }
 
-   char buf[20];
+    char buf[20];
     PonTextoCentradoPantalla(2, "                                 ");
     PonTextoCentradoPantalla(2, "insertar");
     clearportion(2, 4, 79, 19);
@@ -83,7 +85,7 @@ void insertarFile(short *i){
         clearportion(2, 4, 79, 19);
         gotoxy(4, 4);
 
-        printf("Estudiante #:%hu", *i);
+        printf("Estudiante #:%hu", countFile() + 1);
 
         gotoxy(4, 5);
         printf("Matricula:");
@@ -107,8 +109,8 @@ void insertarFile(short *i){
         strcpy(student.Status, "1");
         *i = *i + 1;
 
-        fwrite (&student, sizeof(struct Alumno), 1, of);
-         fclose (of);
+        fwrite(&student, sizeof(struct Alumno), 1, of);
+        fclose(of);
 
         PonTextoCentradoPantalla(2, "listar");
         mensajes("Deseas agregar otro alumno? 0.NO / 1.SI. ", 32);
@@ -133,5 +135,4 @@ void insertarFile(short *i){
     } while (opc != 48);
     clearportion(2, 4, 79, 19);
     // El salto para que no se coma el cuadro el mensaje de abajo
-
 }

@@ -3,7 +3,7 @@ void borrar(Alumno arrDatos[], short *length)
 {
     short opc;
     PonTextoCentradoPantalla(2, "                                 ");
-    PonTextoCentradoPantalla(2, "Buscar");
+    PonTextoCentradoPantalla(2, "Borrar");
 
     do
     {

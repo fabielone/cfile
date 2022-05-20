@@ -18,8 +18,6 @@ void main()
 
     // struct ArrAlumno arrDatos;
 
-    Alumno arrDatos[100];
-
     // selecion cual opcion, numtablas numero de estudiantes.
 
     short selecion, numtablas;
@@ -41,39 +39,39 @@ void main()
 
             */
 
-            //insertar(arrDatos, &numtablas);
             insertarFile(&numtablas);
-            // listar(arrDatos, 1);
+            listarFile(1);
 
             break;
 
         case 50:
             /* funcion de borrar */
-            borrar(arrDatos, &numtablas);
+            // borrar(arrDatos, &numtablas);
 
             break;
 
         case 51:
             /* funcion de modificar */
-            modificar(arrDatos, &numtablas);
+            // modificar(arrDatos, &numtablas);
             // listar(arrDatos, &numtablas);
             break;
 
         case 52:
             /* funcion de ordenar */
-            ordenar(arrDatos, &numtablas);
+            // ordenar(arrDatos, &numtablas);
             // listar(arrDatos, &numtablas);
             break;
 
         case 54:
             /* funcion de listar */
-            //listar(arrDatos, &numtablas);
+            // listar(arrDatos, &numtablas);
             listarFile();
             break;
 
         case 53:
             /* funcion de buscar */
-            buscar(arrDatos, &numtablas);
+            // buscar(arrDatos, &numtablas);
+            buscarFile();
 
             break;
 
