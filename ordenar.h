@@ -189,3 +189,152 @@ void ordenar(Alumno arrDatos[], short *length)
         opc = menuordenar();
     }
 }
+
+
+void ordenarFile(Alumno arrDatos[], short *length)
+{
+    short opc;
+    PonTextoCentradoPantalla(2, "                                 ");
+    PonTextoCentradoPantalla(2, "ordenar");
+
+    opc = menuordenar();
+    while (opc != 48)
+    {
+        struct Alumno swap;
+
+        switch (opc)
+        {
+        case 49:
+            /* Ordenar Por Matricula
+
+
+            */
+
+            for (int c = 0; c < *length - 1; c++)
+            {
+                for (int d = 0; d < *length - c - 1; d++)
+                {
+
+                    if (atoi(arrDatos[d].Matricula) > atoi(arrDatos[d + 1].Matricula))
+                    {
+
+                        swap = arrDatos[d];
+                        arrDatos[d] = arrDatos[d + 1];
+                        arrDatos[d + 1] = swap;
+                    }
+                }
+            }
+
+            listar(arrDatos, length);
+
+            break;
+
+        case 50:
+            for (int c = 0; c < *length - 1; c++)
+            {
+                for (int d = 0; d < *length - c - 1; d++)
+                {
+
+                    {
+                        if (strcmp(arrDatos[d].Nombre, arrDatos[d + 1].Nombre) > 0)
+                        {
+                            swap = arrDatos[d];
+                            arrDatos[d] = arrDatos[d + 1];
+                            arrDatos[d + 1] = swap;
+                        }
+                    }
+                }
+            }
+
+            listar(arrDatos, length);
+
+            break;
+
+        case 51:
+            for (int c = 0; c < *length - 1; c++)
+            {
+                for (int d = 0; d < *length - c - 1; d++)
+                {
+
+                    {
+                        if (strcmp(arrDatos[d].ApellidoP, arrDatos[d + 1].ApellidoP) > 0)
+                        {
+                            swap = arrDatos[d];
+                            arrDatos[d] = arrDatos[d + 1];
+                            arrDatos[d + 1] = swap;
+                        }
+                    }
+                }
+            }
+
+            listar(arrDatos, length);
+
+            break;
+
+        case 52:
+            for (int c = 0; c < *length - 1; c++)
+            {
+                for (int d = 0; d < *length - c - 1; d++)
+                {
+
+                    {
+                        if (strcmp(arrDatos[d].ApellidoM, arrDatos[d + 1].ApellidoM) > 0)
+                        {
+                            swap = arrDatos[d];
+                            arrDatos[d] = arrDatos[d + 1];
+                            arrDatos[d + 1] = swap;
+                        }
+                    }
+                }
+            }
+
+            listar(arrDatos, length);
+
+            break;
+
+        case 54:
+            for (int c = 0; c < *length - 1; c++)
+            {
+                for (int d = 0; d < *length - c - 1; d++)
+                {
+
+                    if (atoi(arrDatos[d].Edad) > atoi(arrDatos[d + 1].Edad))
+                    {
+
+                        swap = arrDatos[d];
+                        arrDatos[d] = arrDatos[d + 1];
+                        arrDatos[d + 1] = swap;
+                    }
+                }
+            }
+
+            listar(arrDatos, length);
+            break;
+
+        case 53:
+            for (int c = 0; c < *length - 1; c++)
+            {
+                for (int d = 0; d < *length - c - 1; d++)
+                {
+
+                    {
+                        if (strcmp(arrDatos[d].Carrera, arrDatos[d + 1].Carrera) > 0)
+                        {
+                            swap = arrDatos[d];
+                            arrDatos[d] = arrDatos[d + 1];
+                            arrDatos[d + 1] = swap;
+                        }
+                    }
+                }
+            }
+
+            listar(arrDatos, length);
+            break;
+
+        default:
+            break;
+        }
+
+        opc = menuordenar();
+    }
+}

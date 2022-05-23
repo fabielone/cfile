@@ -1,138 +1,681 @@
-#include <string.h>
 
-void insertar(Alumno arrData[], short *i)
+short menumodificar()
 {
-    char buf[20];
-    PonTextoCentradoPantalla(2, "                                 ");
-    PonTextoCentradoPantalla(2, "insertar");
-    clearportion(2, 4, 79, 19);
-    // fgets(buf, 20, stdin);
-    Alumno student;
+
     short opc;
+    mensajes("Elija una opcion. ", 32);
+    clearportion(2, 4, 81, 19);
+
+    RecuadroTextoCentrado(24, 7, 56, 17, 38, "[Modificar Por:]");
+    //  Textos Del menu
+    ColorTexto(0);
+    PonTextoCentradoPantalla(9, "Matricula-----------[1]");
+    PonTextoCentradoPantalla(10, "Nombre--------------[2]");
+    PonTextoCentradoPantalla(11, "Apellido Paterno----[3]");
+    PonTextoCentradoPantalla(12, "Apellido Materno----[4]");
+    PonTextoCentradoPantalla(13, "Edad----------------[5]");
+    PonTextoCentradoPantalla(14, "Carrera-------------[6]");
+    PonTextoCentradoPantalla(15, "Salir---------------[0]");
+    PonTextoCentradoPantalla(16, "Seleccione----------[ ]");
+    // Escaner el numero de opcion
+
+    gotoxy(48, 13);
+
     do
     {
-        clearportion(2, 4, 79, 19);
-        gotoxy(4, 4);
-
-        printf("Estudiante #:%hu", *i);
-
-        gotoxy(4, 5);
-        printf("Matricula:");
-        fgets(arrData[*i].Matricula, 25, stdin);
-        gotoxy(4, 6);
-        printf("Nombre:");
-        fgets(arrData[*i].Nombre, 25, stdin);
-        gotoxy(4, 7);
-        printf("Apellido Paterno:");
-        fgets(arrData[*i].ApellidoP, 25, stdin);
-        gotoxy(4, 8);
-        printf("Apellido Materno:");
-        fgets(arrData[*i].ApellidoM, 25, stdin);
-        gotoxy(4, 9);
-        printf("Edad:");
-        fgets(arrData[*i].Edad, 25, stdin);
-        gotoxy(4, 10);
-        printf("Carrera:");
-        fgets(arrData[*i].Carrera, 25, stdin);
-        gotoxy(4, 11);
-        strcpy(arrData[*i].Status, "1");
-        *i = *i + 1;
-
-        PonTextoCentradoPantalla(2, "listar");
-        mensajes("Deseas agregar otro alumno? 0.NO / 1.SI. ", 32);
-
+        gotoxy(50, 16);
         opc = getch();
+        printf("%hu", opc);
 
-        if ((opc == 49 || opc == 48))
+        if ((opc >= 48 && opc <= 54))
         {
+
+            clearportion(24, 7, 56, 17);
+            return opc;
         }
         else
         {
+            mensajes("opcion no valida", 31);
+            gotoxy(48, 13);
+        }
+    } while (opc < 48 || opc > 54);
+    // El salto para que no se coma el cuadro el mensaje de abajo
+}
 
-            do
+
+
+void modificarFile()
+{
+    short opc;
+    PonTextoCentradoPantalla(2, "                                 ");
+    PonTextoCentradoPantalla(2, "Modificar");
+
+    opc = menumodificar();
+
+    while (opc != 48)
+    {
+        if (opc == 49)
+        {
+
+            
+            char tempchar[25];
+            FILE *cfPtr; // accounts.dat file pointer
+            // memset(tempchar, 0, 25);
+            PonTextoCentradoPantalla(9, "Ingrese Matricula: ");
+            fgets(tempchar, 25, stdin);
+            clearportion(2, 4, 79, 19);
+
+            gotoxy(2, 4);
+            printf(" # |");
+            printf(" Matricula | ");
+            printf(" Nombre  | ");
+            printf("Ape Paterno | ");
+            printf("Ape Materno | ");
+            printf("Edad | ");
+            printf("  Carrera    |");
+            printf("Act\n");
+
+            int cont = 0;
+            int i = 1;
+            int length = countFile();
+
+            if ((cfPtr = fopen("c2.txt", "rb")) == NULL)
+            {
+                puts("File could not be opened.");
+            }
+            else
             {
 
-                mensajes("opcion no valida", 31);
-                delay(500);
-                mensajes("Deseas agregar otro alumno? 0.NO / 1.SI. ", 32);
-                opc = getch();
-            } while (opc != 48 && opc != 49);
-        }
-    } while (opc != 48);
-    clearportion(2, 4, 79, 19);
-    // El salto para que no se coma el cuadro el mensaje de abajo
-};
+                PonTextoCentradoPantalla(2, "                 ");
+                PonTextoCentradoPantalla(2, "listar");
+                clearportion(2, 4, 81, 19);
 
-void insertarFile(short *i)
-{
-    FILE *of;
-    of = fopen("c2.txt", "a");
-    if (of == NULL)
-    {
-        fprintf(stderr, "\nError to open the file\n");
-        exit(1);
-    }
+                gotoxy(2, 4);
+                printf(" # |");
+                printf(" Matricula | ");
+                printf(" Nombre  | ");
+                printf("Ape Paterno | ");
+                printf("Ape Materno | ");
+                printf("Edad | ");
+                printf("  Carrera    |");
+                printf("Act");
 
-    char buf[20];
-    PonTextoCentradoPantalla(2, "                                 ");
-    PonTextoCentradoPantalla(2, "insertar");
-    clearportion(2, 4, 79, 19);
-    // fgets(buf, 20, stdin);
-    Alumno student;
-    short opc;
-    do
-    {
-        clearportion(2, 4, 79, 19);
+                // read all records from file (until eof)
+                while (!feof(cfPtr))
+                {
+                    // create clientData with default information
+                    Alumno student = {"", "", "", "", "", "", ""};
+                    Alumno swap;
+
+                    int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
+                    i++;
+                    // display record
+                    if (result != 0 && strcasecmp(tempchar, student.Matricula) == 0)
+                    {
+
+                        clearportion(2, 4, 79, 19);
         gotoxy(4, 4);
 
         printf("Estudiante #:%hu", countFile() + 1);
 
         gotoxy(4, 5);
         printf("Matricula:");
-        fgets(student.Matricula, 25, stdin);
+        fgets(swap.Matricula, 25, stdin);
         gotoxy(4, 6);
         printf("Nombre:");
-        fgets(student.Nombre, 25, stdin);
+        fgets(swap.Nombre, 25, stdin);
         gotoxy(4, 7);
         printf("Apellido Paterno:");
-        fgets(student.ApellidoP, 25, stdin);
+        fgets(swap.ApellidoP, 25, stdin);
         gotoxy(4, 8);
         printf("Apellido Materno:");
-        fgets(student.ApellidoM, 25, stdin);
+        fgets(swap.ApellidoM, 25, stdin);
         gotoxy(4, 9);
         printf("Edad:");
-        fgets(student.Edad, 25, stdin);
+        fgets(swap.Edad, 25, stdin);
         gotoxy(4, 10);
         printf("Carrera:");
-        fgets(student.Carrera, 25, stdin);
+        fgets(swap.Carrera, 25, stdin);
         gotoxy(4, 11);
-        strcpy(student.Status, "1");
-        *i = *i + 1;
+        strcpy(swap.Status, "1");
+       
 
-        fwrite(&student, sizeof(struct Alumno), 1, of);
-        fclose(of);
+        fwrite(&swap, 1*sizeof(struct Alumno), 1, cfPtr);
+        clearportion(2, 4, 79, 19);
+       
 
-        PonTextoCentradoPantalla(2, "listar");
-        mensajes("Deseas agregar otro alumno? 0.NO / 1.SI. ", 32);
+                        gotoxy(2, 5);
+                        printf(" %d \n ", i + 1);
+                        gotoxy(5, 5);
+                        printf("|\n");
+                        CortarTexto(student.Matricula, 7, 5 + i, 6);
+                        gotoxy(17, 5);
+                        printf("|");
 
-        opc = getch();
+                        CortarTexto(student.Nombre, 18, 5 + i, 10);
+                        gotoxy(28, 5);
+                        printf("|");
 
-        if ((opc == 49 || opc == 48))
-        {
-        }
-        else
-        {
+                        CortarTexto(student.ApellidoP, 29, 5 + i, 13);
+                        gotoxy(42, 5);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoM, 43, 5 + i, 13);
+                        gotoxy(56, 5);
+                        printf("|");
+
+                        CortarTexto(student.Edad, 57, 5 + i, 3);
+                        gotoxy(63, 5);
+                        printf("|");
+
+                        CortarTexto(student.Carrera, 64, 5 + i, 14);
+                        gotoxy(78, 5);
+                        printf("|");
+                        CortarTexto(student.Status, 79, 5 + i, 1);
+                        i++;
+                    }
+                }
+
+                fclose(cfPtr); // fclose closes the file
+            }
 
             do
             {
 
-                mensajes("opcion no valida", 31);
-                delay(500);
-                mensajes("Deseas agregar otro alumno? 0.NO / 1.SI. ", 32);
+                mensajes("Presione 0 para salir ", 32);
                 opc = getch();
-            } while (opc != 48 && opc != 49);
+            } while (opc != 48);
         }
-    } while (opc != 48);
-    clearportion(2, 4, 79, 19);
-    // El salto para que no se coma el cuadro el mensaje de abajo
+
+        if (opc == 50)
+        {
+            struct Alumno swap;
+            char tempchar[25];
+            FILE *cfPtr; // accounts.dat file pointer
+            // memset(tempchar, 0, 25);
+            PonTextoCentradoPantalla(9, "Ingrese Matricula: ");
+            fgets(tempchar, 25, stdin);
+            clearportion(2, 4, 79, 19);
+
+            gotoxy(2, 4);
+            printf(" # |");
+            printf(" Matricula | ");
+            printf(" Nombre  | ");
+            printf("Ape Paterno | ");
+            printf("Ape Materno | ");
+            printf("Edad | ");
+            printf("  Carrera    |");
+            printf("Act\n");
+
+            int cont = 0;
+            int i = 0;
+            int length = countFile();
+
+            if ((cfPtr = fopen("c2.txt", "rb")) == NULL)
+            {
+                puts("File could not be opened.");
+            }
+            else
+            {
+
+                PonTextoCentradoPantalla(2, "                 ");
+                PonTextoCentradoPantalla(2, "listar");
+                clearportion(2, 4, 81, 19);
+
+                gotoxy(2, 4);
+                printf(" # |");
+                printf(" Matricula | ");
+                printf(" Nombre  | ");
+                printf("Ape Paterno | ");
+                printf("Ape Materno | ");
+                printf("Edad | ");
+                printf("  Carrera    |");
+                printf("Act");
+
+                // read all records from file (until eof)
+                while (!feof(cfPtr))
+                {
+                    // create clientData with default information
+                    Alumno student = {"", "", "", "", "", "", ""};
+
+                    int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
+                    // display record
+                    if (result != 0 && strcasecmp(tempchar, student.Matricula) == 0)
+                    {
+                        gotoxy(2, 5 + i);
+                        printf(" %d \n ", i + 1);
+                        gotoxy(5, 5 + i);
+                        printf("|\n");
+                        CortarTexto(student.Matricula, 7, 5 + i, 6);
+                        gotoxy(17, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Nombre, 18, 5 + i, 10);
+                        gotoxy(28, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoP, 29, 5 + i, 13);
+                        gotoxy(42, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoM, 43, 5 + i, 13);
+                        gotoxy(56, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Edad, 57, 5 + i, 3);
+                        gotoxy(63, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Carrera, 64, 5 + i, 14);
+                        gotoxy(78, 5 + i);
+                        printf("|");
+                        CortarTexto(student.Status, 79, 5 + i, 1);
+                        i++;
+                    }
+                }
+
+                fclose(cfPtr); // fclose closes the file
+            }
+
+            do
+            {
+
+                mensajes("Presione 0 para salir ", 32);
+                opc = getch();
+            } while (opc != 48);
+        }
+        if (opc == 51)
+        {
+            struct Alumno swap;
+            char tempchar[25];
+            FILE *cfPtr; // accounts.dat file pointer
+            // memset(tempchar, 0, 25);
+            PonTextoCentradoPantalla(9, "Ingrese Matricula: ");
+            fgets(tempchar, 25, stdin);
+            clearportion(2, 4, 79, 19);
+
+            gotoxy(2, 4);
+            printf(" # |");
+            printf(" Matricula | ");
+            printf(" Nombre  | ");
+            printf("Ape Paterno | ");
+            printf("Ape Materno | ");
+            printf("Edad | ");
+            printf("  Carrera    |");
+            printf("Act\n");
+
+            int cont = 0;
+            int i = 0;
+            int length = countFile();
+
+            if ((cfPtr = fopen("c2.txt", "rb")) == NULL)
+            {
+                puts("File could not be opened.");
+            }
+            else
+            {
+
+                PonTextoCentradoPantalla(2, "                 ");
+                PonTextoCentradoPantalla(2, "listar");
+                clearportion(2, 4, 81, 19);
+
+                gotoxy(2, 4);
+                printf(" # |");
+                printf(" Matricula | ");
+                printf(" Nombre  | ");
+                printf("Ape Paterno | ");
+                printf("Ape Materno | ");
+                printf("Edad | ");
+                printf("  Carrera    |");
+                printf("Act");
+
+                // read all records from file (until eof)
+                while (!feof(cfPtr))
+                {
+                    // create clientData with default information
+                    Alumno student = {"", "", "", "", "", "", ""};
+
+                    int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
+                    // display record
+                    if (result != 0 && strcasecmp(tempchar, student.Matricula) == 0)
+                    {
+                        gotoxy(2, 5 + i);
+                        printf(" %d \n ", i + 1);
+                        gotoxy(5, 5 + i);
+                        printf("|\n");
+                        CortarTexto(student.Matricula, 7, 5 + i, 6);
+                        gotoxy(17, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Nombre, 18, 5 + i, 10);
+                        gotoxy(28, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoP, 29, 5 + i, 13);
+                        gotoxy(42, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoM, 43, 5 + i, 13);
+                        gotoxy(56, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Edad, 57, 5 + i, 3);
+                        gotoxy(63, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Carrera, 64, 5 + i, 14);
+                        gotoxy(78, 5 + i);
+                        printf("|");
+                        CortarTexto(student.Status, 79, 5 + i, 1);
+                        i++;
+                    }
+                }
+
+                fclose(cfPtr); // fclose closes the file
+            }
+
+            do
+            {
+
+                mensajes("Presione 0 para salir ", 32);
+                opc = getch();
+            } while (opc != 48);
+        }
+
+        if (opc == 52)
+        {
+            struct Alumno swap;
+            char tempchar[25];
+            FILE *cfPtr; // accounts.dat file pointer
+            // memset(tempchar, 0, 25);
+            PonTextoCentradoPantalla(9, "Ingrese Matricula: ");
+            fgets(tempchar, 25, stdin);
+            clearportion(2, 4, 79, 19);
+
+            gotoxy(2, 4);
+            printf(" # |");
+            printf(" Matricula | ");
+            printf(" Nombre  | ");
+            printf("Ape Paterno | ");
+            printf("Ape Materno | ");
+            printf("Edad | ");
+            printf("  Carrera    |");
+            printf("Act\n");
+
+            int cont = 0;
+            int i = 0;
+            int length = countFile();
+
+            if ((cfPtr = fopen("c2.txt", "rb")) == NULL)
+            {
+                puts("File could not be opened.");
+            }
+            else
+            {
+
+                PonTextoCentradoPantalla(2, "                 ");
+                PonTextoCentradoPantalla(2, "listar");
+                clearportion(2, 4, 81, 19);
+
+                gotoxy(2, 4);
+                printf(" # |");
+                printf(" Matricula | ");
+                printf(" Nombre  | ");
+                printf("Ape Paterno | ");
+                printf("Ape Materno | ");
+                printf("Edad | ");
+                printf("  Carrera    |");
+                printf("Act");
+
+                // read all records from file (until eof)
+                while (!feof(cfPtr))
+                {
+                    // create clientData with default information
+                    Alumno student = {"", "", "", "", "", "", ""};
+
+                    int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
+                    // display record
+                    if (result != 0 && strcasecmp(tempchar, student.Matricula) == 0)
+                    {
+                        gotoxy(2, 5 + i);
+                        printf(" %d \n ", i + 1);
+                        gotoxy(5, 5 + i);
+                        printf("|\n");
+                        CortarTexto(student.Matricula, 7, 5 + i, 6);
+                        gotoxy(17, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Nombre, 18, 5 + i, 10);
+                        gotoxy(28, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoP, 29, 5 + i, 13);
+                        gotoxy(42, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoM, 43, 5 + i, 13);
+                        gotoxy(56, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Edad, 57, 5 + i, 3);
+                        gotoxy(63, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Carrera, 64, 5 + i, 14);
+                        gotoxy(78, 5 + i);
+                        printf("|");
+                        CortarTexto(student.Status, 79, 5 + i, 1);
+                        i++;
+                    }
+                }
+
+                fclose(cfPtr); // fclose closes the file
+            }
+
+            do
+            {
+
+                mensajes("Presione 0 para salir ", 32);
+                opc = getch();
+            } while (opc != 48);
+        }
+
+        if (opc == 53)
+        {
+            struct Alumno swap;
+            char tempchar[25];
+            FILE *cfPtr; // accounts.dat file pointer
+            // memset(tempchar, 0, 25);
+            PonTextoCentradoPantalla(9, "Ingrese Matricula: ");
+            fgets(tempchar, 25, stdin);
+            clearportion(2, 4, 79, 19);
+
+            gotoxy(2, 4);
+            printf(" # |");
+            printf(" Matricula | ");
+            printf(" Nombre  | ");
+            printf("Ape Paterno | ");
+            printf("Ape Materno | ");
+            printf("Edad | ");
+            printf("  Carrera    |");
+            printf("Act\n");
+
+            int cont = 0;
+            int i = 0;
+            int length = countFile();
+
+            if ((cfPtr = fopen("c2.txt", "rb")) == NULL)
+            {
+                puts("File could not be opened.");
+            }
+            else
+            {
+
+                PonTextoCentradoPantalla(2, "                 ");
+                PonTextoCentradoPantalla(2, "listar");
+                clearportion(2, 4, 81, 19);
+
+                gotoxy(2, 4);
+                printf(" # |");
+                printf(" Matricula | ");
+                printf(" Nombre  | ");
+                printf("Ape Paterno | ");
+                printf("Ape Materno | ");
+                printf("Edad | ");
+                printf("  Carrera    |");
+                printf("Act");
+
+                // read all records from file (until eof)
+                while (!feof(cfPtr))
+                {
+                    // create clientData with default information
+                    Alumno student = {"", "", "", "", "", "", ""};
+
+                    int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
+                    // display record
+                    if (result != 0 && strcasecmp(tempchar, student.Matricula) == 0)
+                    {
+                        gotoxy(2, 5 + i);
+                        printf(" %d \n ", i + 1);
+                        gotoxy(5, 5 + i);
+                        printf("|\n");
+                        CortarTexto(student.Matricula, 7, 5 + i, 6);
+                        gotoxy(17, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Nombre, 18, 5 + i, 10);
+                        gotoxy(28, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoP, 29, 5 + i, 13);
+                        gotoxy(42, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoM, 43, 5 + i, 13);
+                        gotoxy(56, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Edad, 57, 5 + i, 3);
+                        gotoxy(63, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Carrera, 64, 5 + i, 14);
+                        gotoxy(78, 5 + i);
+                        printf("|");
+                        CortarTexto(student.Status, 79, 5 + i, 1);
+                        i++;
+                    }
+                }
+
+                fclose(cfPtr); // fclose closes the file
+            }
+
+            do
+            {
+
+                mensajes("Presione 0 para salir ", 32);
+                opc = getch();
+            } while (opc != 48);
+        }
+        if (opc == 54)
+        {
+            struct Alumno swap;
+            char tempchar[25];
+            FILE *cfPtr; // accounts.dat file pointer
+            // memset(tempchar, 0, 25);
+            PonTextoCentradoPantalla(9, "Ingrese Matricula: ");
+            fgets(tempchar, 25, stdin);
+            clearportion(2, 4, 79, 19);
+
+            gotoxy(2, 4);
+            printf(" # |");
+            printf(" Matricula | ");
+            printf(" Nombre  | ");
+            printf("Ape Paterno | ");
+            printf("Ape Materno | ");
+            printf("Edad | ");
+            printf("  Carrera    |");
+            printf("Act\n");
+
+            int cont = 0;
+            int i = 0;
+            int length = countFile();
+
+            if ((cfPtr = fopen("c2.txt", "rb")) == NULL)
+            {
+                puts("File could not be opened.");
+            }
+            else
+            {
+
+                PonTextoCentradoPantalla(2, "                 ");
+                PonTextoCentradoPantalla(2, "listar");
+                clearportion(2, 4, 81, 19);
+
+                gotoxy(2, 4);
+                printf(" # |");
+                printf(" Matricula | ");
+                printf(" Nombre  | ");
+                printf("Ape Paterno | ");
+                printf("Ape Materno | ");
+                printf("Edad | ");
+                printf("  Carrera    |");
+                printf("Act");
+
+                // read all records from file (until eof)
+                while (!feof(cfPtr))
+                {
+                    // create clientData with default information
+                    Alumno student = {"", "", "", "", "", "", ""};
+
+                    int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
+                    // display record
+                    if (result != 0 && strcasecmp(tempchar, student.Matricula) == 0)
+                    {
+                        gotoxy(2, 5 + i);
+                        printf(" %d \n ", i + 1);
+                        gotoxy(5, 5 + i);
+                        printf("|\n");
+                        CortarTexto(student.Matricula, 7, 5 + i, 6);
+                        gotoxy(17, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Nombre, 18, 5 + i, 10);
+                        gotoxy(28, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoP, 29, 5 + i, 13);
+                        gotoxy(42, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.ApellidoM, 43, 5 + i, 13);
+                        gotoxy(56, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Edad, 57, 5 + i, 3);
+                        gotoxy(63, 5 + i);
+                        printf("|");
+
+                        CortarTexto(student.Carrera, 64, 5 + i, 14);
+                        gotoxy(78, 5 + i);
+                        printf("|");
+                        CortarTexto(student.Status, 79, 5 + i, 1);
+                        i++;
+                    }
+                }
+
+                fclose(cfPtr); // fclose closes the file
+            }
+
+            do
+            {
+
+                mensajes("Presione 0 para salir ", 32);
+                opc = getch();
+            } while (opc != 48);
+        }
+
+        opc = menumodificar();
+    }
 }
+

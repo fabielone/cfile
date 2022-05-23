@@ -54,6 +54,7 @@ void main()
             /* funcion de modificar */
             // modificar(arrDatos, &numtablas);
             // listar(arrDatos, &numtablas);
+            modificarFile();
             break;
 
         case 52:
