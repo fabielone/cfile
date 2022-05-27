@@ -1,5 +1,5 @@
 
-void borrar(Alumno arrDatos[], short *length)
+void borrarFile()
 {
     short opc;
     PonTextoCentradoPantalla(2, "                                 ");
@@ -8,22 +8,49 @@ void borrar(Alumno arrDatos[], short *length)
     do
     {
 
-        struct Alumno swap;
         char tempchar[25];
+        int length = countFile();
+        FILE *cfPtr;
 
         PonTextoCentradoPantalla(9, "Ingrese Matricula: ");
         fgets(tempchar, 25, stdin);
         clearportion(2, 4, 79, 19);
 
-        for (int i = 0; i < *length; i++)
+        if ((cfPtr = fopen("c2.txt", "r+")) == NULL)
         {
-            if (strcasecmp(tempchar, arrDatos[i].Matricula) == 0)
+            puts("File could not be opened.");
+        }
+        else
+        {
+            int i;
+            Alumno swap = {"", "", "", "", "", "", ""};
+            int location;
+
+            while (!feof(cfPtr))
             {
-                strcpy(arrDatos[i].Status, "0");
+                // create clientData with default information
+                Alumno student = {"", "", "", "", "", "", ""};
+
+                int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
+                // display record
+                if (result != 0 && strcmp(tempchar, student.Matricula) == 0)
+
+                {
+                    strcpy(student.Status, "0");
+                    fseek(cfPtr, i * sizeof(struct Alumno), SEEK_SET);
+                    fwrite(&student, sizeof(struct Alumno), 1, cfPtr);
+                    fseek(cfPtr, (i + 1) * sizeof(struct Alumno), SEEK_SET);
+                }
+                i++;
             }
+            // strcpy(swap.Status, "0");
+            // fseek(cfPtr, location * sizeof(struct Alumno), SEEK_SET);
+            // fwrite(&swap, sizeof(struct Alumno), 1, cfPtr);
+
+            fclose(cfPtr); // fclose closes the file
         }
 
-        listar(arrDatos, length);
+        listarFile();
 
         mensajes("Deseas borrar otro alumno? 0.NO / 1.SI. ", 32);
 

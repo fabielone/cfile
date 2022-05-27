@@ -190,8 +190,7 @@ void ordenar(Alumno arrDatos[], short *length)
     }
 }
 
-
-void ordenarFile(Alumno arrDatos[], short *length)
+void ordenarFile()
 {
     short opc;
     PonTextoCentradoPantalla(2, "                                 ");
@@ -201,6 +200,8 @@ void ordenarFile(Alumno arrDatos[], short *length)
     while (opc != 48)
     {
         struct Alumno swap;
+        int length = countFile();
+        FILE *cfPtr; // accounts.dat file pointer
 
         switch (opc)
         {
@@ -210,125 +211,66 @@ void ordenarFile(Alumno arrDatos[], short *length)
 
             */
 
-            for (int c = 0; c < *length - 1; c++)
+            if ((cfPtr = fopen("c2.txt", "r+")) == NULL)
             {
-                for (int d = 0; d < *length - c - 1; d++)
+                puts("File could not be opened.");
+            }
+            else
+            {
+
+                Alumno student = {"", "", "", "", "", "", ""};
+                Alumno swap = {"", "", "", "", "", "", ""};
+
+                for (int f = 0; f < length; f++)
                 {
 
-                    if (atoi(arrDatos[d].Matricula) > atoi(arrDatos[d + 1].Matricula))
+                    fseek(cfPtr, f * sizeof(struct Alumno), SEEK_SET);
+                    int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
+                    fseek(cfPtr, (f + 1) * sizeof(struct Alumno), SEEK_SET);
+                    int result2 = fread(&swap, sizeof(struct Alumno), 1, cfPtr);
+                    for (int d = 0; d < length - f - 1; d++)
                     {
 
-                        swap = arrDatos[d];
-                        arrDatos[d] = arrDatos[d + 1];
-                        arrDatos[d + 1] = swap;
+                        if (atoi(student.Matricula) > atoi(swap.Matricula))
+                        {
+
+                            fseek(cfPtr, f * sizeof(struct Alumno), SEEK_SET);
+                            fwrite(&swap, sizeof(struct Alumno), 1, cfPtr);
+                            fseek(cfPtr, (f + 1) * sizeof(struct Alumno), SEEK_SET);
+
+                            fwrite(&student, sizeof(struct Alumno), 1, cfPtr);
+                        }
                     }
                 }
+
+                fclose(cfPtr); // fclose closes the file
+            }
+            for (int c = 0; c < length - 1; c++)
+            {
             }
 
-            listar(arrDatos, length);
+            listarFile();
 
             break;
 
         case 50:
-            for (int c = 0; c < *length - 1; c++)
-            {
-                for (int d = 0; d < *length - c - 1; d++)
-                {
-
-                    {
-                        if (strcmp(arrDatos[d].Nombre, arrDatos[d + 1].Nombre) > 0)
-                        {
-                            swap = arrDatos[d];
-                            arrDatos[d] = arrDatos[d + 1];
-                            arrDatos[d + 1] = swap;
-                        }
-                    }
-                }
-            }
-
-            listar(arrDatos, length);
 
             break;
 
         case 51:
-            for (int c = 0; c < *length - 1; c++)
-            {
-                for (int d = 0; d < *length - c - 1; d++)
-                {
-
-                    {
-                        if (strcmp(arrDatos[d].ApellidoP, arrDatos[d + 1].ApellidoP) > 0)
-                        {
-                            swap = arrDatos[d];
-                            arrDatos[d] = arrDatos[d + 1];
-                            arrDatos[d + 1] = swap;
-                        }
-                    }
-                }
-            }
-
-            listar(arrDatos, length);
 
             break;
 
         case 52:
-            for (int c = 0; c < *length - 1; c++)
-            {
-                for (int d = 0; d < *length - c - 1; d++)
-                {
-
-                    {
-                        if (strcmp(arrDatos[d].ApellidoM, arrDatos[d + 1].ApellidoM) > 0)
-                        {
-                            swap = arrDatos[d];
-                            arrDatos[d] = arrDatos[d + 1];
-                            arrDatos[d + 1] = swap;
-                        }
-                    }
-                }
-            }
-
-            listar(arrDatos, length);
 
             break;
 
         case 54:
-            for (int c = 0; c < *length - 1; c++)
-            {
-                for (int d = 0; d < *length - c - 1; d++)
-                {
 
-                    if (atoi(arrDatos[d].Edad) > atoi(arrDatos[d + 1].Edad))
-                    {
-
-                        swap = arrDatos[d];
-                        arrDatos[d] = arrDatos[d + 1];
-                        arrDatos[d + 1] = swap;
-                    }
-                }
-            }
-
-            listar(arrDatos, length);
             break;
 
         case 53:
-            for (int c = 0; c < *length - 1; c++)
-            {
-                for (int d = 0; d < *length - c - 1; d++)
-                {
 
-                    {
-                        if (strcmp(arrDatos[d].Carrera, arrDatos[d + 1].Carrera) > 0)
-                        {
-                            swap = arrDatos[d];
-                            arrDatos[d] = arrDatos[d + 1];
-                            arrDatos[d + 1] = swap;
-                        }
-                    }
-                }
-            }
-
-            listar(arrDatos, length);
             break;
 
         default:

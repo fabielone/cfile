@@ -46,7 +46,7 @@ void main()
 
         case 50:
             /* funcion de borrar */
-            // borrar(arrDatos, &numtablas);
+            borrarFile();
 
             break;
 
@@ -59,7 +59,7 @@ void main()
 
         case 52:
             /* funcion de ordenar */
-            // ordenar(arrDatos, &numtablas);
+            ordenarFile();
             // listar(arrDatos, &numtablas);
             break;
 

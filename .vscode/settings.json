@@ -7,7 +7,8 @@
     "borrar.h": "c",
     "interfaz.h": "c",
     "menu.h": "c",
-    "buscar.h": "c"
+    "buscar.h": "c",
+    "salida.h": "c"
   },
   "C_Cpp.errorSquiggles": "Enabled",
 }
