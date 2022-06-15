@@ -59,7 +59,8 @@ void modificarFile()
             FILE *cfPtr; // accounts.dat file pointer
             // memset(tempchar, 0, 25);
             PonTextoCentradoPantalla(9, "Ingrese Matricula: ");
-            fgets(tempchar, 25, stdin);
+            //fgets(tempchar, 25, stdin);
+            validarNumeros(tempchar,25,"none");
             clearportion(2, 4, 79, 19);
 
             gotoxy(2, 4);
@@ -117,22 +118,29 @@ void modificarFile()
 
                         gotoxy(4, 5);
                         printf("Matricula:");
-                        fgets(swap.Matricula, 25, stdin);
+                        //fgets(swap.Matricula, 25, stdin);
+                        validarLetras(swap.Matricula,25,"none");
+
                         gotoxy(4, 6);
                         printf("Nombre:");
-                        fgets(swap.Nombre, 25, stdin);
+                        //fgets(swap.Nombre, 25, stdin);
+                        validarLetras(swap.Nombre,25,"none");
                         gotoxy(4, 7);
                         printf("Apellido Paterno:");
-                        fgets(swap.ApellidoP, 25, stdin);
+                        //fgets(swap.ApellidoP, 25, stdin);
+                        validarLetras(swap.ApellidoP,25,"none");
                         gotoxy(4, 8);
                         printf("Apellido Materno:");
-                        fgets(swap.ApellidoM, 25, stdin);
+                        //fgets(swap.ApellidoM, 25, stdin);
+                        validarLetras(swap.ApellidoM,25,"none");
                         gotoxy(4, 9);
                         printf("Edad:");
-                        fgets(swap.Edad, 25, stdin);
+                        //fgets(swap.Edad, 25, stdin);
+                        validarNumeros(swap.Edad,25,"none");
                         gotoxy(4, 10);
                         printf("Carrera:");
-                        fgets(swap.Carrera, 25, stdin);
+                       // fgets(swap.Carrera, 25, stdin);
+                       validarLetras(swap.Carrera,25,"none");
                         gotoxy(4, 11);
                         strcpy(swap.Status, "1");
 

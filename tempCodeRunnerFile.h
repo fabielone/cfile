@@ -42,8 +42,6 @@ short menumodificar()
     // El salto para que no se coma el cuadro el mensaje de abajo
 }
 
-
-
 void modificarFile()
 {
     short opc;
@@ -57,12 +55,12 @@ void modificarFile()
         if (opc == 49)
         {
 
-            
             char tempchar[25];
             FILE *cfPtr; // accounts.dat file pointer
             // memset(tempchar, 0, 25);
             PonTextoCentradoPantalla(9, "Ingrese Matricula: ");
-            fgets(tempchar, 25, stdin);
+            //fgets(tempchar, 25, stdin);
+            validarNumeros(tempchar,25,"none");
             clearportion(2, 4, 79, 19);
 
             gotoxy(2, 4);
@@ -76,10 +74,10 @@ void modificarFile()
             printf("Act\n");
 
             int cont = 0;
-            int i = 1;
+            int i = 0;
             int length = countFile();
 
-            if ((cfPtr = fopen("c2.txt", "rb")) == NULL)
+            if ((cfPtr = fopen("c2.txt", "r+")) == NULL)
             {
                 puts("File could not be opened.");
             }
@@ -108,70 +106,77 @@ void modificarFile()
                     Alumno swap;
 
                     int result = fread(&student, sizeof(struct Alumno), 1, cfPtr);
-                    i++;
+
                     // display record
                     if (result != 0 && strcasecmp(tempchar, student.Matricula) == 0)
                     {
 
                         clearportion(2, 4, 79, 19);
-        gotoxy(4, 4);
+                        gotoxy(4, 4);
 
-        printf("Estudiante #:%hu", countFile() + 1);
+                        printf("Estudiante #:%hu", i);
 
-        gotoxy(4, 5);
-        printf("Matricula:");
-        fgets(swap.Matricula, 25, stdin);
-        gotoxy(4, 6);
-        printf("Nombre:");
-        fgets(swap.Nombre, 25, stdin);
-        gotoxy(4, 7);
-        printf("Apellido Paterno:");
-        fgets(swap.ApellidoP, 25, stdin);
-        gotoxy(4, 8);
-        printf("Apellido Materno:");
-        fgets(swap.ApellidoM, 25, stdin);
-        gotoxy(4, 9);
-        printf("Edad:");
-        fgets(swap.Edad, 25, stdin);
-        gotoxy(4, 10);
-        printf("Carrera:");
-        fgets(swap.Carrera, 25, stdin);
-        gotoxy(4, 11);
-        strcpy(swap.Status, "1");
-       
+                        gotoxy(4, 5);
+                        printf("Matricula:");
+                        //fgets(swap.Matricula, 25, stdin);
+                        validarLetras(swap.Matricula,25,"none");
 
-        fwrite(&swap, 1*sizeof(struct Alumno), 1, cfPtr);
-        clearportion(2, 4, 79, 19);
-       
+                        gotoxy(4, 6);
+                        printf("Nombre:");
+                        //fgets(swap.Nombre, 25, stdin);
+                        validarLetras(swap.Nombre,25,"none");
+                        gotoxy(4, 7);
+                        printf("Apellido Paterno:");
+                        //fgets(swap.ApellidoP, 25, stdin);
+                        validarLetras(swap.ApellidoP,25,"none");
+                        gotoxy(4, 8);
+                        printf("Apellido Materno:");
+                        //fgets(swap.ApellidoM, 25, stdin);
+                        validarLetras(swap.ApellidoM,25,"none");
+                        gotoxy(4, 9);
+                        printf("Edad:");
+                        //fgets(swap.Edad, 25, stdin);
+                        validarNumeros(swap.Edad,25,"none");
+                        gotoxy(4, 10);
+                        printf("Carrera:");
+                       // fgets(swap.Carrera, 25, stdin);
+                       validarLetras(swap.Carrera,25,"none");
+                        gotoxy(4, 11);
+                        strcpy(swap.Status, "1");
+
+                        fseek(cfPtr, i * sizeof(struct Alumno), SEEK_SET);
+                        fwrite(&swap, sizeof(struct Alumno), 1, cfPtr);
+
+                        clearportion(2, 4, 79, 19);
 
                         gotoxy(2, 5);
                         printf(" %d \n ", i + 1);
                         gotoxy(5, 5);
                         printf("|\n");
-                        CortarTexto(student.Matricula, 7, 5 + i, 6);
+                        CortarTexto(swap.Matricula, 7, 5, 6);
                         gotoxy(17, 5);
                         printf("|");
 
-                        CortarTexto(student.Nombre, 18, 5 + i, 10);
+                        CortarTexto(swap.Nombre, 18, 5, 10);
                         gotoxy(28, 5);
                         printf("|");
 
-                        CortarTexto(student.ApellidoP, 29, 5 + i, 13);
+                        CortarTexto(swap.ApellidoP, 29, 5, 13);
                         gotoxy(42, 5);
                         printf("|");
 
-                        CortarTexto(student.ApellidoM, 43, 5 + i, 13);
+                        CortarTexto(swap.ApellidoM, 43, 5, 13);
                         gotoxy(56, 5);
                         printf("|");
 
-                        CortarTexto(student.Edad, 57, 5 + i, 3);
+                        CortarTexto(swap.Edad, 57, 5, 3);
                         gotoxy(63, 5);
                         printf("|");
 
-                        CortarTexto(student.Carrera, 64, 5 + i, 14);
+                        CortarTexto(swap.Carrera, 64, 5, 14);
                         gotoxy(78, 5);
                         printf("|");
-                        CortarTexto(student.Status, 79, 5 + i, 1);
+                        CortarTexto(swap.Status, 79, 5, 1);
                         i++;
                     }
                 }
@@ -678,4 +683,3 @@ void modificarFile()
         opc = menumodificar();
     }
 }
-

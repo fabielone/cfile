@@ -5,6 +5,7 @@
 #include "./interfaz.h"
 #include "./menu.h"
 #include "./listar.h"
+#include "./validation.h"
 #include "./insertar.h"
 #include "./borrar.h"
 #include "./modificar.h"
